@@ -1,34 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixiJS Example</title>
-    <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.x/dist/pixi.min.js"></script>
-</head>
-<body>
-    <script>
-        // Create the application helper and add its render target to the page
-        const app = new PIXI.Application({width: 640, height: 360});
-        document.body.appendChild(app.view);
+<!doctype html>
+<html>
+  <head>
+    <script src="https://pixijs.download/release/pixi.min.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      // Create the application helper and add its render target to the page
+      const app = new PIXI.Application();
+      await app.init({ width: 640, height: 360 })
+      document.body.appendChild(app.canvas);
 
-        // Load the sprite image and set up the scene
-        PIXI.Assets.load('https://pixijs.com/assets/pixie-test.png').then((texture) => {
-            const sprite = PIXI.Sprite.from(texture);
-            app.stage.addChild(sprite);
+      // Create the sprite and add it to the stage
+      await PIXI.Assets.load('sample.png');
+      let sprite = PIXI.Sprite.from('sample.png');
+      app.stage.addChild(sprite);
 
-            // Center the sprite
-            sprite.x = app.screen.width / 2;
-            sprite.y = app.screen.height / 2;
-            sprite.anchor.set(0.5);
-
-            // Add a ticker callback to move the sprite back and forth
-            let elapsed = 0.0;
-            app.ticker.add((delta) => {
-                elapsed += delta;
-                sprite.x = app.screen.width / 2 + Math.cos(elapsed/50.0) * 100.0;
-            });
-        });
+      // Add a ticker callback to move the sprite back and forth
+      let elapsed = 0.0;
+      app.ticker.add((ticker) => {
+        elapsed += ticker.deltaTime;
+        sprite.x = 100.0 + Math.cos(elapsed/50.0) * 100.0;
+      });
     </script>
-</body>
+  </body>
 </html>
